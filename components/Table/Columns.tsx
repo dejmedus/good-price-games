@@ -11,30 +11,24 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { IGameData } from "@/lib/types";
 
-export interface IGame {
-  internalName: string;
-  title: string;
-  metacriticLink: string;
-  dealID: string;
-  storeID: string;
-  gameID: string;
-  salePrice: string;
-  normalPrice: string;
-  isOnSale: string;
-  savings: string;
-  metacriticScore: string;
-  steamRatingText: string;
-  steamRatingPercent: string;
-  steamRatingCount: string;
-  steamAppID: string;
-  releaseDate: number;
-  lastChange: number;
-  dealRating: string;
-  thumb: string;
-}
+export const columns: ColumnDef<IGameData>[] = [
+  {
+    accessorKey: "thumb",
+    cell: ({ row }) => {
+      const game = row.original;
 
-export const columns: ColumnDef<IGame>[] = [
+      return (
+        <img
+          className="w-24"
+          src={game.thumb}
+          alt={`${game.title} thumbnail`}
+        />
+      );
+    },
+    header: "",
+  },
   {
     accessorKey: "title",
     header: "Title",
@@ -48,7 +42,11 @@ export const columns: ColumnDef<IGame>[] = [
         currency: "USD",
       }).format(price);
 
-      return <div>{formatted !== "$0.00" ? formatted : "Free"}</div>;
+      return formatted !== "$0.00" ? (
+        <div className="text-center">{formatted}</div>
+      ) : (
+        <div className="font-medium text-center text-blue-500">Free</div>
+      );
     },
     header: ({ column }) => {
       return (
@@ -71,7 +69,7 @@ export const columns: ColumnDef<IGame>[] = [
         currency: "USD",
       }).format(price);
 
-      return <div className="line-through">{formatted}</div>;
+      return <div className="text-center line-through">{formatted}</div>;
     },
     header: ({ column }) => {
       return (
@@ -90,7 +88,7 @@ export const columns: ColumnDef<IGame>[] = [
     cell: ({ row }) => {
       const savings = parseFloat(row.getValue("savings"));
 
-      return <div>{`${Math.round(savings)}%`}</div>;
+      return <div className="text-center">{`${Math.round(savings)}%`}</div>;
     },
     header: ({ column }) => {
       return (
@@ -105,6 +103,31 @@ export const columns: ColumnDef<IGame>[] = [
     },
   },
   {
+    accessorKey: "storeData",
+    cell: ({ row }) => {
+      const game = row.original;
+      const url = game.storeData.storeUrl;
+
+      return (
+        <a
+          className="text-center"
+          target="_blank"
+          href={
+            url ? url : `http://store.steampowered.com/app/${game.steamAppID}/`
+          }
+        >
+          <span className="sr-only">View in Store</span>
+          <img
+            className="w-24"
+            src={`https://www.cheapshark.com${game.storeData.images.logo}`}
+            alt={game.storeData.storeName}
+          />
+        </a>
+      );
+    },
+    header: "",
+  },
+  {
     id: "actions",
     cell: ({ row }) => {
       const game = row.original;
@@ -112,28 +135,43 @@ export const columns: ColumnDef<IGame>[] = [
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="w-8 h-8 p-0">
+            <Button variant="ghost" className="p-1">
               <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="w-4 h-4" />
+              <MoreHorizontal className="w-8 h-8" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(game.gameID)}
-            >
-              Copy game ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            {game.steamAppID !== "" ? (
-              <DropdownMenuItem>
-                <a
-                  target="_blank"
-                  href={`http://store.steampowered.com/app/${game.steamAppID}/`}
-                >
-                  View on Steam
-                </a>
-              </DropdownMenuItem>
+            {game.steamRatingPercent !== "0" ? (
+              <>
+                <DropdownMenuLabel>
+                  Steam Rating: {game.steamRatingPercent}%
+                </DropdownMenuLabel>
+                <DropdownMenuItem>
+                  <a
+                    target="_blank"
+                    href={`http://store.steampowered.com/app/${game.steamAppID}/`}
+                  >
+                    View on Steam
+                  </a>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+              </>
+            ) : null}
+            {game.metacriticScore !== "0" ? (
+              <>
+                <DropdownMenuLabel>
+                  Metacritic Score: {game.metacriticScore}
+                </DropdownMenuLabel>
+                <DropdownMenuItem>
+                  <a
+                    target="_blank"
+                    href={`https://metacritic.com/${game.metacriticLink}`}
+                  >
+                    View on Metacritic
+                  </a>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+              </>
             ) : null}
             <DropdownMenuItem>
               <a
@@ -143,37 +181,9 @@ export const columns: ColumnDef<IGame>[] = [
                 View on CheapShark
               </a>
             </DropdownMenuItem>
-            {game.metacriticLink !== "" ? (
-              <DropdownMenuItem>
-                <a
-                  target="_blank"
-                  href={`https://metacritic.com/${game.metacriticLink}`}
-                >
-                  View on Metacritic
-                </a>
-              </DropdownMenuItem>
-            ) : null}
           </DropdownMenuContent>
         </DropdownMenu>
       );
     },
   },
-  //   {
-  //     accessorKey: "steamRatingPercent",
-  //     cell: ({ row }) => {
-  //       const rating = parseFloat(row.getValue("steamRatingPercent"));
-
-  //       return <div>{rating === 0 ? "" : `${rating}%`}</div>;
-  //     },
-  //     header: "Steam Rating",
-  //   },
-  //   {
-  //     accessorKey: "metacriticScore",
-  //     cell: ({ row }) => {
-  //       const rating = parseFloat(row.getValue("metacriticScore"));
-
-  //       return <div>{rating === 0 ? "" : `${rating}/100`}</div>;
-  //     },
-  //     header: "Metacritic Score",
-  //   },
 ];

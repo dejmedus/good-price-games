@@ -1,6 +1,6 @@
 ## Good Price Games 🕹
 
-Find great games on sale for up to 100% off. Built in < 24h for the [HackBattle React vs Angular Hackathon](https://hackbattle-react-vs-angular.devpost.com/). 
+Find great games on sale for up to 100% off. Built in < 24h for the [HackBattle React vs Angular Hackathon](https://hackbattle-react-vs-angular.devpost.com/). Awarded Best UI/UX 🎉
 
 ### Built with
 

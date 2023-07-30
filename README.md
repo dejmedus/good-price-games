@@ -1,6 +1,6 @@
 ## Good Price Games 🕹
 
-Find great games on sale for up to 100% off. Built in < 24h for the MLH [HackBattle React vs Angular Hackathon](https://hackbattle-react-vs-angular.devpost.com/). 
+Find great games on sale for up to 100% off. Built in < 24h for the [HackBattle React vs Angular Hackathon](https://hackbattle-react-vs-angular.devpost.com/). 
 
 ### Built with
 
@@ -50,5 +50,6 @@ git push origin your-branch-name
 
 🎉 Follow the link provided to create a pull request
 
-
 ## Screenshots
+
+<img width="678" alt="goodpricegames" src="https://github.com/dejmedus/good-price-games/assets/59973863/fa16c92a-e8cb-4de9-8895-f3fb9d133342">

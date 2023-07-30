@@ -1,27 +1,14 @@
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
-} from "@/components/ui/navigation-menu";
+import ToggleTheme from "@/components/ToggleTheme";
+import { Gamepad } from "lucide-react";
 
-function Navbar() {
+export default function Header() {
   return (
-    <NavigationMenu>
-      <NavigationMenuList>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>Item One</NavigationMenuTrigger>
-          <NavigationMenuContent>
-            <NavigationMenuLink>Link</NavigationMenuLink>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-      </NavigationMenuList>
-    </NavigationMenu>
+    <header className="flex items-center justify-between px-4 py-2 shadow-md bg-gradient-to-r from-rose-700 to-blue-600">
+      <div className="flex items-center gap-2 px-4 text-neutral-100">
+        <Gamepad />
+        <h1 className="font-bold">Good Price Games</h1>
+      </div>
+      <ToggleTheme />
+    </header>
   );
 }
-
-export default Navbar;
